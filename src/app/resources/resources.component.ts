@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Resources } from '../models/resources';
+import { Component, OnInit } from '@angular/core'
+import { Resources } from '../models/resources'
 
 @Component({
   selector: 'app-resources',

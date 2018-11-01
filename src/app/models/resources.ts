@@ -1,4 +1,5 @@
-export class Resources {
+export class Resources
+{
   food: number
   iron: number
 }
