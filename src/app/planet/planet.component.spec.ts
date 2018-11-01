@@ -2,12 +2,7 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 import { PlanetComponent } from './planet.component'
 import { routes } from './../app-routing.module'
 import { Component } from '@angular/core'
-
-import { Location } from '@angular/common'
 import { RouterTestingModule } from '@angular/router/testing'
-import { Router } from '@angular/router'
-import { PlanetStatusComponent } from '../planet-status/planet-status.component'
-import { PlanetConstructionComponent } from '../planet-construction/planet-construction.component'
 
 @Component({
   selector: 'app-resources',
@@ -19,24 +14,18 @@ describe('PlanetComponent', () =>
 {
   let component: PlanetComponent
   let fixture: ComponentFixture<PlanetComponent>
-
-  let location: Location
-  let router: Router
   let compiled: any
 
   beforeEach(async(() =>
   {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes)],
+      imports: [RouterTestingModule],
       declarations: [PlanetComponent, MockResourcesComponent,
-        PlanetStatusComponent, PlanetConstructionComponent]
+        MockRouterOutletComponent]
     })
       .compileComponents()
-    router = TestBed.get(Router)
-    location = TestBed.get(Location)
 
     fixture = TestBed.createComponent(PlanetComponent)
-    fixture.ngZone.run(() => router.initialNavigation())
 
     component = fixture.componentInstance
     compiled = fixture.nativeElement
@@ -67,10 +56,11 @@ describe('PlanetComponent', () =>
     fixture.detectChanges()
     const navNode = compiled.querySelector('nav')
     expect(navNode).toBeDefined()
-    const links = ['', 'construction']
+    const links = ['', '/construction']
+      .map(link => `/planet/${component.name}${link}`)
     const navLinks = Array.from(navNode.querySelectorAll('a'))
-    expect(navLinks.map((link: any) => link.hasAttribute('routerLink'))
-      .reduce((prev, cur) => prev && cur)).toBeTruthy()
+    navLinks.forEach((link: any) => expect(links)
+      .toContain(link.getAttribute('href')))
   })
 
   it('should have a app-resources tag', () =>
@@ -81,54 +71,12 @@ describe('PlanetComponent', () =>
     ).toBeDefined()
   })
 
-  it('should route to status on "/"', fakeAsync(() =>
-  {
-    fixture.ngZone.run(() =>
-    {
-      router.navigate([''])
-      tick()
-      expect(location.path()).toBe('/')
-      fixture.detectChanges()
-      expect(fixture.nativeElement.querySelector('app-planet-status'))
-        .toBeDefined()
-    })
-  }))
 
-  it('should route to construction on "/construction"', fakeAsync(() =>
-  {
-    fixture.ngZone.run(() =>
-    {
-      router.navigate(['construction'])
-      tick()
-      expect(location.path()).toBe('/construction')
-      fixture.detectChanges()
-      expect(fixture.nativeElement.querySelector('app-planet-construction'))
-        .toBeDefined()
-    })
-  }))
 })
 
-
-// describe("Router: Planet", () => {
-//   let location: Location;
-//   let router: Router;
-//   let fixture;
-
-
-
-//     router = TestBed.get(Router);
-//     location = TestBed.get(Location);
-
-//     fixture = TestBed.createComponent(PlanetComponent);
-//     router.initialNavigation();
-
-//     // TODO: https://codecraft.tv/courses/angular/unit-testing/routing/
-//     it('should be tested', () => {
-//       router.navigate(['']);
-//       tick();
-//       expect(location.path()).toBe('/');
-//       fixture.detectChanges();
-//     });
-//   })
-// })
-
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'router-outlet',
+  template: `<p>MockRouterOutlet</p>`
+})
+class MockRouterOutletComponent { }

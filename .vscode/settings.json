@@ -3,6 +3,5 @@
   "typescript.format.insertSpaceAfterTypeAssertion": true,
   "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
   "typescript.format.placeOpenBraceOnNewLineForFunctions": true,
-  "typescript.suggest.completeFunctionCalls": true,
   "javascript.format.placeOpenBraceOnNewLineForControlBlocks": true
 }

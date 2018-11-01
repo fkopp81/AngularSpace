@@ -1,45 +1,55 @@
-import { TestBed, async, ComponentFixture } from '@angular/core/testing'
+import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing'
 import { AppComponent } from './app.component'
 import { Component } from '@angular/core'
 
-describe('AppComponent', () => {
+describe('AppComponent', () =>
+{
   let fixture: ComponentFixture<AppComponent>
-  beforeEach(async(() => {
+  let component: AppComponent
+  let compiled: any
+
+  beforeEach(async(() =>
+  {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent,
-        MockPlanetComponent
+        AppComponent, MockRouterOutletComponent
       ],
     }).compileComponents()
     fixture = TestBed.createComponent(AppComponent)
+
+    component = fixture.componentInstance
+    compiled = fixture.nativeElement
+    fixture.detectChanges()
   }))
 
-  it('should create the app', () => {
+  it('should create the app', () =>
+  {
     const app = fixture.debugElement.componentInstance
     expect(app).toBeTruthy()
   })
 
-  it(`should have as title 'AngularSpace'`, () => {
+  it(`should have as title 'AngularSpace'`, () =>
+  {
     const app = fixture.debugElement.componentInstance
     expect(app.title).toEqual('AngularSpace')
   })
 
-  it('should render title in a h1 tag', () => {
+  it('should render title in a h1 tag', () =>
+  {
     fixture.detectChanges()
-    const compiled = fixture.debugElement.nativeElement
     expect(compiled.querySelector('h1').textContent)
       .toContain('Welcome to AngularSpace!')
   })
-  it('should contain an app-planet tag', () => {
-    fixture.detectChanges()
-    expect(Array.from(fixture.nativeElement.querySelectorAll('p'))
-      .find((element: Node) => element.textContent === 'MockPlanetComponent'))
-      .toBeDefined()
+
+  it('should contain an router-outlet tag', () =>
+  {
+    expect(compiled.querySelector('router-outlet')).toBeDefined()
   })
 })
 
 @Component({
-  selector: 'app-planet',
-  template: `<p>MockPlanetComponent</p>`
+  // tslint:disable-next-line:component-selector
+  selector: 'router-outlet',
+  template: `<p>MockRouterOutlet</p>`
 })
-class MockPlanetComponent { }
+class MockRouterOutletComponent { }
